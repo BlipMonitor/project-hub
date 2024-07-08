@@ -6,7 +6,9 @@ import { server } from '../config/stellar';
  * @param {string} accountId - The Stellar account ID
  * @returns {Promise<StellarSdk.Horizon.AccountResponse>}
  */
-const getAccountDetails = async (accountId: string): Promise<StellarSdk.Horizon.AccountResponse> => {
+const getAccountDetails = async (
+  accountId: string
+): Promise<StellarSdk.Horizon.AccountResponse> => {
   try {
     const account = await server.loadAccount(accountId);
     return account;
@@ -59,7 +61,9 @@ const getLatestLedgerSequence = async (): Promise<number> => {
  * @param {string} transactionHash - The transaction hash
  * @returns {Promise<StellarSdk.Horizon.ServerApi.TransactionRecord>}
  */
-const getTransactionDetails = async (transactionHash: string): Promise<StellarSdk.Horizon.ServerApi.TransactionRecord> => {
+const getTransactionDetails = async (
+  transactionHash: string
+): Promise<StellarSdk.Horizon.ServerApi.TransactionRecord> => {
   try {
     const transaction = await server.transactions().transaction(transactionHash).call();
     return transaction;
@@ -79,5 +83,5 @@ export default {
   getAccountDetails,
   getLatestLedger,
   getLatestLedgerSequence,
-  getTransactionDetails,
+  getTransactionDetails
 };
