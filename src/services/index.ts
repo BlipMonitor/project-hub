@@ -4,3 +4,4 @@ export { default as tokenService } from './token.service';
 export { default as emailService } from './email.service';
 export { default as stellarService } from './stellar.service';
 export { default as websocketService } from './websocket.service';
+export { default as messageQueueService } from './messageQueue.service';

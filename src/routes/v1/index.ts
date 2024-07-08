@@ -2,6 +2,7 @@ import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
 import stellarRoute from './stellar.route';
+import messageQueueRoute from './messageQueue.route';
 import docsRoute from './docs.route';
 import config from '../../config/config';
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/stellar',
     route: stellarRoute
+  },
+  {
+    path: '/message-queue',
+    route: messageQueueRoute
   }
 ];
 
