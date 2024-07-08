@@ -1,11 +1,16 @@
 import { Server } from 'http';
+import WebSocket from 'ws';
 import app from './app';
 import prisma from './client';
 import config from './config/config';
 import logger from './config/logger';
+import { websocketService } from './services';
 import { ledgerPoller } from './services/ledgerPoller.service';
 
 let server: Server;
+let wss: WebSocket.Server;
+const clients = new Set<WebSocket>();
+
 prisma.$connect().then(() => {
   logger.info('Connected to SQL Database');
   server = app.listen(config.port, () => {
@@ -13,6 +18,15 @@ prisma.$connect().then(() => {
 
     // Start the ledger poller
     ledgerPoller.start();
+
+    // Initialize WebSocket server
+    wss = websocketService.initializeWebSocketServer(server);
+
+    wss.on('connection', (ws: WebSocket) => {
+      websocketService.handleConnection(ws, clients);
+    });
+
+    websocketService.startStreaming(clients);
   });
 });
 
