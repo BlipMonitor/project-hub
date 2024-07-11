@@ -2,7 +2,8 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import { xdr } from '@stellar/stellar-sdk';
 import config from '../config/config';
 import { server } from '../config/stellar';
-import { SorobanContractData, ContractState } from '../types/soroban';
+import { SorobanContractData, ContractState, ContractInvocation } from '../types/soroban';
+import { parseContractInvocation } from '../utils/contractParser';
 
 /**
  * Get account details
@@ -112,10 +113,29 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
   }
 };
 
+/**
+ * Handle contract invocation
+ * @param {ContractInvocation} invocation - The contract invocation data
+ * @returns {Promise<object>} Parsed contract invocation data
+ */
+const handleContractInvocation = async (invocation: ContractInvocation): Promise<object> => {
+  try {
+    const parsedData = parseContractInvocation(invocation);
+    // Further processing can be done here if needed
+    return parsedData;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to handle contract invocation: ${error.message}`);
+    }
+    throw new Error('Failed to handle contract invocation: Unknown error');
+  }
+};
+
 export default {
   getAccountDetails,
   getLatestLedger,
   getLatestLedgerSequence,
   getTransactionDetails,
-  getSorobanContractData
+  getSorobanContractData,
+  handleContractInvocation
 };

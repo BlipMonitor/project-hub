@@ -18,8 +18,17 @@ const getSorobanContractData = {
   })
 };
 
+const invokeContract = {
+  body: Joi.object().keys({
+    contractId: Joi.string().required(),
+    functionName: Joi.string().required(),
+    args: Joi.array().items(Joi.any()).required()
+  })
+};
+
 export default {
   getAccountDetails,
   getTransactionDetails,
-  getSorobanContractData
+  getSorobanContractData,
+  invokeContract
 };

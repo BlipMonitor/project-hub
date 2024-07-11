@@ -29,9 +29,16 @@ const getSorobanContractData = catchAsync(async (req, res) => {
   res.send(contractData);
 });
 
+const handleContractInvocation = catchAsync(async (req, res) => {
+  const invocationData = req.body;
+  const result = await stellarService.handleContractInvocation(invocationData);
+  res.send(result);
+});
+
 export default {
   getAccountDetails,
   getLatestLedger,
   getTransactionDetails,
-  getSorobanContractData
+  getSorobanContractData,
+  handleContractInvocation
 };

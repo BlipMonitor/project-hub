@@ -21,6 +21,11 @@ router.get(
   validate(stellarValidation.getSorobanContractData),
   stellarController.getSorobanContractData
 );
+router.post(
+  '/soroban/contract/invoke',
+  validate(stellarValidation.invokeContract),
+  stellarController.handleContractInvocation
+);
 
 export default router;
 
@@ -128,4 +133,26 @@ export default router;
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /stellar/soroban/contract/invoke:
+ *   post:
+ *     summary: Handle contract invocation
+ *     description: Handle contract invocation.
+ *     tags: [Stellar]
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         schema:
+ *           $ref: '#/components/schemas/ContractInvocation'
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ContractInvocation'
  */
