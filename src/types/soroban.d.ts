@@ -7,7 +7,24 @@ export interface SorobanContractData {
 }
 
 export interface ContractState {
-  [key: string]: xdr.ScVal | any; // Allow for flexibility in the type
+  [key: string]: xdr.ScVal | any;
+}
+
+export interface ContractFunction {
+  name: string;
+  parameters: ContractFunctionParameter[];
+  returnType: xdr.ScSpecTypeDef;
+}
+
+export interface ContractFunctionParameter {
+  name: string;
+  type: xdr.ScSpecTypeDef;
+}
+
+export interface ContractInvocation {
+  contractId: string;
+  functionName: string;
+  args: xdr.ScVal[];
 }
 
 export interface ContractEvent {

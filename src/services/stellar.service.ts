@@ -2,7 +2,7 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import { xdr } from '@stellar/stellar-sdk';
 import config from '../config/config';
 import { server } from '../config/stellar';
-import { SorobanContractData } from '../types/soroban';
+import { SorobanContractData, ContractState } from '../types/soroban';
 
 /**
  * Get account details
@@ -95,12 +95,14 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
     const key = xdr.ScVal.scvSymbol('state');
     const contractState = await rpcServer.getContractData(contractId, key);
 
+    const state: ContractState = {
+      state: contractState
+    };
+
     return {
       contractId,
       contractCode: contractCode.toString('hex'),
-      contractState: {
-        state: contractState
-      }
+      contractState: state
     };
   } catch (error) {
     if (error instanceof Error) {

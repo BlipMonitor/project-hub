@@ -1,5 +1,10 @@
 import { xdr } from '@stellar/stellar-sdk';
 
+/**
+ * Serialize a value to a Soroban value
+ * @param value - The value to serialize
+ * @returns The serialized value
+ */
 export function serializeScVal(value: any): xdr.ScVal {
   if (typeof value === 'string') {
     return xdr.ScVal.scvString(value);
@@ -26,6 +31,11 @@ export function serializeScVal(value: any): xdr.ScVal {
   }
 }
 
+/**
+ * Deserialize a Soroban value to a value
+ * @param scval - The value to deserialize
+ * @returns The deserialized value
+ */
 export function deserializeScVal(scval: xdr.ScVal): any {
   switch (scval.switch()) {
     case xdr.ScValType.scvString():
