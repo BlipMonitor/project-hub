@@ -97,8 +97,8 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
       contractId,
       contractCode: contractCode.toString('hex'),
       contractState: contractState.reduce(
-        (acc, entry) => {
-          acc[entry.key.toString()] = entry.val;
+        (acc: Record<string, xdr.ScVal>, entry: { key: string; val: xdr.ScVal }) => {
+          acc[entry.key] = entry.val;
           return acc;
         },
         {} as Record<string, xdr.ScVal>
