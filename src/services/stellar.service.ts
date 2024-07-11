@@ -1,5 +1,8 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
 import { server } from '../config/stellar';
+import { xdr, Contract } from '@stellar/stellar-sdk';
+import { SorobanContractData, ContractFunction, SorobanTransactionData } from '../types/soroban';
+import { serializeScVal, deserializeScVal } from '../utils/sorobanTypes';
 
 /**
  * Get account details
@@ -79,9 +82,110 @@ const getTransactionDetails = async (
  * TODO: Get all transactions
  */
 
+/**
+ * Get Soroban contract data
+ * @param {string} contractId - The Soroban contract ID
+ * @returns {Promise<SorobanContractData>}
+ */
+const getSorobanContractData = async (contractId: string): Promise<SorobanContractData> => {
+  try {
+    // const contract = new Contract(contractId);
+    const contractCode = await server.getContractCode(contractId);
+    const contractState = await server.getContractData(contractId);
+
+    return {
+      contractId,
+      contractCode: contractCode.toString('hex'),
+      contractState: contractState.reduce(
+        (acc, entry) => {
+          acc[entry.key.toString()] = entry.val;
+          return acc;
+        },
+        {} as Record<string, xdr.ScVal>
+      )
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get Soroban contract data: ${error.message}`);
+    }
+    throw new Error('Failed to get Soroban contract data: Unknown error');
+  }
+};
+
+/**
+ * Get Soroban contract functions
+ * @param {string} contractId - The Soroban contract ID
+ * @returns {Promise<ContractFunction[]>}
+ */
+const getSorobanContractFunctions = async (contractId: string): Promise<ContractFunction[]> => {
+  try {
+    const contract = new Contract(contractId);
+    const functions = await contract.getFunctions();
+
+    return functions.map((func: any) => ({
+      name: func.name,
+      parameters: func.parameters.map((param: any) => ({
+        name: param.name,
+        type: param.type
+      })),
+      returnType: func.returnType
+    }));
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get Soroban contract functions: ${error.message}`);
+    }
+    throw new Error('Failed to get Soroban contract functions: Unknown error');
+  }
+};
+
+/**
+ * Invoke Soroban contract function
+ * @param {string} contractId - The Soroban contract ID
+ * @param {string} functionName - The function name to invoke
+ * @param {xdr.ScVal[]} args - The function arguments
+ * @returns {Promise<SorobanTransactionData>}
+ */
+const invokeSorobanContractFunction = async (
+  contractId: string,
+  functionName: string,
+  args: any[]
+): Promise<SorobanTransactionData> => {
+  try {
+    const contract = new Contract(contractId);
+    const serializedArgs = args.map(serializeScVal);
+    const transaction = await contract.call(functionName, ...serializedArgs);
+    const result = await server.submitTransaction(transaction);
+
+    return {
+      hash: result.hash,
+      ledger: result.ledger,
+      contractInvocation: {
+        contractId,
+        functionName,
+        args: serializedArgs
+      },
+      events: result.events.map((event: any) => ({
+        type: event.type,
+        contractId: event.contractId,
+        topics: event.topics,
+        data: deserializeScVal(event.data)
+      })),
+      result: deserializeScVal(result.returnValue)
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to invoke Soroban contract function: ${error.message}`);
+    }
+    throw new Error('Failed to invoke Soroban contract function: Unknown error');
+  }
+};
+
 export default {
   getAccountDetails,
   getLatestLedger,
   getLatestLedgerSequence,
-  getTransactionDetails
+  getTransactionDetails,
+  getSorobanContractData,
+  getSorobanContractFunctions,
+  invokeSorobanContractFunction
 };
