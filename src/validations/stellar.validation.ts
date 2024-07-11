@@ -18,24 +18,8 @@ const getSorobanContractData = {
   })
 };
 
-const getSorobanContractFunctions = {
-  params: Joi.object().keys({
-    contractId: Joi.string().required().description('Soroban contract ID')
-  })
-};
-
-const invokeSorobanContractFunction = {
-  body: Joi.object().keys({
-    contractId: Joi.string().required().description('Soroban contract ID'),
-    functionName: Joi.string().required().description('Function name to invoke'),
-    args: Joi.array().items(Joi.object()).description('Function arguments')
-  })
-};
-
 export default {
   getAccountDetails,
   getTransactionDetails,
-  getSorobanContractData,
-  getSorobanContractFunctions,
-  invokeSorobanContractFunction
+  getSorobanContractData
 };

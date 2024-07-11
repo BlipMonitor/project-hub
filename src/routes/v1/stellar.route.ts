@@ -21,16 +21,6 @@ router.get(
   validate(stellarValidation.getSorobanContractData),
   stellarController.getSorobanContractData
 );
-router.get(
-  '/soroban/contract/:contractId/functions',
-  validate(stellarValidation.getSorobanContractFunctions),
-  stellarController.getSorobanContractFunctions
-);
-router.post(
-  '/soroban/invoke',
-  validate(stellarValidation.invokeSorobanContractFunction),
-  stellarController.invokeSorobanContractFunction
-);
 
 export default router;
 
@@ -134,74 +124,6 @@ export default router;
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SorobanContractData'
- *       "400":
- *         $ref: '#/components/responses/BadRequest'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /stellar/soroban/contract/{contractId}/functions:
- *   get:
- *     summary: Get Soroban contract functions
- *     description: Retrieve functions for a Soroban contract.
- *     tags: [Stellar]
- *     parameters:
- *       - in: path
- *         name: contractId
- *         required: true
- *         schema:
- *           type: string
- *         description: Soroban contract ID
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/ContractFunction'
- *       "400":
- *         $ref: '#/components/responses/BadRequest'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /stellar/soroban/invoke:
- *   post:
- *     summary: Invoke Soroban contract function
- *     description: Invoke a function on a Soroban contract.
- *     tags: [Stellar]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - contractId
- *               - functionName
- *               - args
- *             properties:
- *               contractId:
- *                 type: string
- *               functionName:
- *                 type: string
- *               args:
- *                 type: array
- *                 items:
- *                   type: object
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SorobanTransactionData'
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
