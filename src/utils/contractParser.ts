@@ -1,4 +1,4 @@
-import { ContractInvocation } from '../types/soroban';
+import { ContractInvocation, ContractState } from '../types/soroban';
 import { deserializeScVal } from './sorobanTypes';
 
 /**
@@ -16,4 +16,19 @@ export function parseContractInvocation(invocation: ContractInvocation): object 
     functionName,
     args: parsedArgs
   };
+}
+
+/**
+ * Parse contract state changes
+ * @param {ContractState} state - The contract state data
+ * @returns {object} Parsed contract state data
+ */
+export function parseContractState(state: ContractState): object {
+  const parsedState: { [key: string]: any } = {};
+
+  for (const [key, value] of Object.entries(state)) {
+    parsedState[key] = deserializeScVal(value);
+  }
+
+  return parsedState;
 }

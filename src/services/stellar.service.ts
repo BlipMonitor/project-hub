@@ -3,7 +3,7 @@ import { xdr } from '@stellar/stellar-sdk';
 import config from '../config/config';
 import { server } from '../config/stellar';
 import { SorobanContractData, ContractState, ContractInvocation } from '../types/soroban';
-import { parseContractInvocation } from '../utils/contractParser';
+import { parseContractInvocation, parseContractState } from '../utils/contractParser';
 
 /**
  * Get account details
@@ -100,10 +100,12 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
       state: contractState
     };
 
+    const parsedState = parseContractState(state);
+
     return {
       contractId,
       contractCode: contractCode.toString('hex'),
-      contractState: state
+      contractState: parsedState
     };
   } catch (error) {
     if (error instanceof Error) {
