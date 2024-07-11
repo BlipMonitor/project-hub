@@ -10,15 +10,17 @@ export function serializeScVal(value: any): xdr.ScVal {
       return xdr.ScVal.scvU64(xdr.Uint64.fromString(value.toString()));
     }
   } else if (typeof value === 'boolean') {
-    return value ? xdr.ScVal.scvTrue() : xdr.ScVal.scvFalse();
+    return xdr.ScVal.scvBool(value);
   } else if (Array.isArray(value)) {
     return xdr.ScVal.scvVec(value.map(serializeScVal));
   } else if (typeof value === 'object' && value !== null) {
-    const map = new xdr.ScMapEntry.Map();
-    for (const [key, val] of Object.entries(value)) {
-      map.set(serializeScVal(key), serializeScVal(val));
-    }
-    return xdr.ScVal.scvMap(map);
+    const mapEntries = Object.entries(value).map(([key, val]) => {
+      return new xdr.ScMapEntry({
+        key: serializeScVal(key),
+        val: serializeScVal(val)
+      });
+    });
+    return xdr.ScVal.scvMap(mapEntries);
   } else {
     throw new Error(`Unsupported type for Soroban serialization: ${typeof value}`);
   }
@@ -38,15 +40,15 @@ export function deserializeScVal(scval: xdr.ScVal): any {
       return scval.i64().toString();
     case xdr.ScValType.scvU64():
       return scval.u64().toString();
-    case xdr.ScValType.scvTrue():
-      return true;
-    case xdr.ScValType.scvFalse():
-      return false;
+    case xdr.ScValType.scvBool():
+      return scval.value();
     case xdr.ScValType.scvVec():
-      return scval.vec().map(deserializeScVal);
+      return scval.vec()?.map(deserializeScVal) || [];
     case xdr.ScValType.scvMap():
       return Object.fromEntries(
-        scval.map().map((entry) => [deserializeScVal(entry.key()), deserializeScVal(entry.val())])
+        scval
+          .map()
+          ?.map((entry) => [deserializeScVal(entry.key()), deserializeScVal(entry.val())]) || []
       );
     default:
       throw new Error(`Unsupported Soroban type for deserialization: ${scval.switch().name}`);
