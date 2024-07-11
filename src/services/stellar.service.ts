@@ -4,6 +4,7 @@ import config from '../config/config';
 import { server } from '../config/stellar';
 import { SorobanContractData, ContractState, ContractInvocation } from '../types/soroban';
 import { parseContractInvocation, parseContractState } from '../utils/contractParser';
+import { storeContractInvocation, storeContractState } from './storage.service';
 
 /**
  * Get account details
@@ -94,13 +95,19 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
 
     const contractCode = await rpcServer.getContractWasmByContractId(contractId);
     const key = xdr.ScVal.scvSymbol('state');
-    const contractState = await rpcServer.getContractData(contractId, key);
+    const contractStateResult = await rpcServer.getContractData(contractId, key);
+
+    // Extract the correct value from LedgerEntryResult
+    const contractState = contractStateResult.val.toXDR('base64'); // Convert to base64 string
 
     const state: ContractState = {
-      state: contractState
+      state: xdr.ScVal.fromXDR(Buffer.from(contractState, 'base64')) // Convert back to xdr.ScVal
     };
 
-    const parsedState = parseContractState(state);
+    const parsedState: ContractState = parseContractState(state);
+
+    // Store in PostgreSQL
+    await storeContractState(parsedState);
 
     return {
       contractId,
@@ -118,12 +125,17 @@ const getSorobanContractData = async (contractId: string): Promise<SorobanContra
 /**
  * Handle contract invocation
  * @param {ContractInvocation} invocation - The contract invocation data
- * @returns {Promise<object>} Parsed contract invocation data
+ * @returns {Promise<ContractInvocation>} Parsed contract invocation data
  */
-const handleContractInvocation = async (invocation: ContractInvocation): Promise<object> => {
+const handleContractInvocation = async (
+  invocation: ContractInvocation
+): Promise<ContractInvocation> => {
   try {
-    const parsedData = parseContractInvocation(invocation);
-    // Further processing can be done here if needed
+    const parsedData: ContractInvocation = parseContractInvocation(invocation);
+
+    // Store in PostgreSQL
+    await storeContractInvocation(parsedData);
+
     return parsedData;
   } catch (error) {
     if (error instanceof Error) {

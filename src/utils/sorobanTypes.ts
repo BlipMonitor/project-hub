@@ -5,29 +5,31 @@ import { xdr } from '@stellar/stellar-sdk';
  * @param value - The value to serialize
  * @returns The serialized value
  */
-export function serializeScVal(value: any): xdr.ScVal {
-  if (typeof value === 'string') {
-    return xdr.ScVal.scvString(value);
-  } else if (typeof value === 'number') {
-    if (Number.isInteger(value)) {
-      return xdr.ScVal.scvI32(value);
-    } else {
-      return xdr.ScVal.scvU64(xdr.Uint64.fromString(value.toString()));
-    }
-  } else if (typeof value === 'boolean') {
-    return xdr.ScVal.scvBool(value);
-  } else if (Array.isArray(value)) {
-    return xdr.ScVal.scvVec(value.map(serializeScVal));
-  } else if (typeof value === 'object' && value !== null) {
-    const mapEntries = Object.entries(value).map(([key, val]) => {
-      return new xdr.ScMapEntry({
-        key: serializeScVal(key),
-        val: serializeScVal(val)
-      });
-    });
-    return xdr.ScVal.scvMap(mapEntries);
-  } else {
-    throw new Error(`Unsupported type for Soroban serialization: ${typeof value}`);
+export function serializeScVal(value: xdr.ScVal): any {
+  switch (value.switch()) {
+    case xdr.ScValType.scvString():
+      return value.str();
+    case xdr.ScValType.scvSymbol():
+      return value.sym().toString();
+    case xdr.ScValType.scvI32():
+      return value.i32();
+    case xdr.ScValType.scvU32():
+      return value.u32();
+    case xdr.ScValType.scvI64():
+      return value.i64().toString();
+    case xdr.ScValType.scvU64():
+      return value.u64().toString();
+    case xdr.ScValType.scvBool():
+      return value.value();
+    case xdr.ScValType.scvVec():
+      return value.vec()?.map(serializeScVal) || [];
+    case xdr.ScValType.scvMap():
+      return Object.fromEntries(
+        value.map()?.map((entry) => [serializeScVal(entry.key()), serializeScVal(entry.val())]) ||
+          []
+      );
+    default:
+      throw new Error(`Unsupported Soroban type for serialization: ${value.switch().name}`);
   }
 }
 

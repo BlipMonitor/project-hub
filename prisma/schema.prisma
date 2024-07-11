@@ -40,6 +40,21 @@ model Message {
   createdAt DateTime @default(now())
 }
 
+model ContractInvocation {
+  id            Int      @id @default(autoincrement())
+  contractId    String
+  functionName  String
+  args          Json
+  createdAt     DateTime @default(now())
+}
+
+model ContractState {
+  id            Int      @id @default(autoincrement())
+  contractId    String
+  state         Json
+  createdAt     DateTime @default(now())
+}
+
 enum Role {
   USER
   ADMIN

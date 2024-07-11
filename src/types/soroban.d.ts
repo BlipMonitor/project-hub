@@ -7,7 +7,7 @@ export interface SorobanContractData {
 }
 
 export interface ContractState {
-  [key: string]: xdr.ScVal | any;
+  [key: string]: xdr.ScVal;
 }
 
 export interface ContractFunction {
