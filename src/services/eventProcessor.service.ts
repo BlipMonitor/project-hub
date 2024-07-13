@@ -1,6 +1,7 @@
 import { ContractEvent } from '../types/soroban';
 import { storeContractState } from './storage.service';
 import { parseContractState } from '../utils/contractParser';
+import logger from '../config/logger';
 
 class EventProcessor {
   /**
@@ -21,9 +22,9 @@ class EventProcessor {
       await storeContractState(parsedState);
     } catch (error) {
       if (error instanceof Error) {
-        console.error(`Failed to process event: ${error.message}`);
+        logger.error(`Failed to process event: ${error.message}`);
       } else {
-        console.error('Failed to process event: Unknown error');
+        logger.error('Failed to process event: Unknown error');
       }
     }
   }
