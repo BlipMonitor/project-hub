@@ -1,47 +1,47 @@
 import express from 'express';
 import validate from '../../middlewares/validate';
-import { accountValidation } from '../../validations';
-import { accountController } from '../../controllers';
+import { transactionValidation } from '../../validations';
+import { transactionController } from '../../controllers';
 
 const router = express.Router();
 
 router.get(
-  '/:accountId',
-  validate(accountValidation.getAccountDetails),
-  accountController.getAccountDetails
+  '/:transactionHash',
+  validate(transactionValidation.getTransactionDetails),
+  transactionController.getTransactionDetails
 );
-router.get('/', accountController.getAllAccounts);
+router.get('/', transactionController.getAllTransactions);
 
 export default router;
 
 /**
  * @swagger
  * tags:
- *   name: Account
- *   description: Account operations
+ *   name: Transaction
+ *   description: Transaction operations
  */
 
 /**
  * @swagger
- * /account/{accountId}:
+ * /transaction/{transactionHash}:
  *   get:
- *     summary: Get account details
- *     description: Retrieve details for a Stellar account.
- *     tags: [Account]
+ *     summary: Get transaction details
+ *     description: Retrieve details for a Stellar transaction.
+ *     tags: [Transaction]
  *     parameters:
  *       - in: path
- *         name: accountId
+ *         name: transactionHash
  *         required: true
  *         schema:
  *           type: string
- *         description: Stellar account ID
+ *         description: Stellar transaction hash
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Account'
+ *               $ref: '#/components/schemas/Transaction'
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
@@ -50,11 +50,11 @@ export default router;
 
 /**
  * @swagger
- * /account:
+ * /transaction:
  *   get:
- *     summary: Get all accounts
- *     description: Retrieve details for all Stellar accounts.
- *     tags: [Account]
+ *     summary: Get all transactions
+ *     description: Retrieve details for all Stellar transactions.
+ *     tags: [Transaction]
  *     responses:
  *       "200":
  *         description: OK
@@ -63,7 +63,7 @@ export default router;
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Account'
+ *                 $ref: '#/components/schemas/Transaction'
  *       "500":
  *         $ref: '#/components/responses/InternalServerError'
  */
