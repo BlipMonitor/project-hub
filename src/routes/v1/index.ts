@@ -1,7 +1,10 @@
 import express from 'express';
 import authRoute from './auth.route';
 import userRoute from './user.route';
-import stellarRoute from './stellar.route';
+import accountRoute from './account.route';
+import ledgerRoute from './ledger.route';
+import contractRoute from './contract.route';
+import transactionRoute from './transaction.route';
 import messageQueueRoute from './messageQueue.route';
 import docsRoute from './docs.route';
 import config from '../../config/config';
@@ -18,8 +21,20 @@ const defaultRoutes = [
     route: userRoute
   },
   {
-    path: '/stellar',
-    route: stellarRoute
+    path: '/account',
+    route: accountRoute
+  },
+  {
+    path: '/ledger',
+    route: ledgerRoute
+  },
+  {
+    path: '/contract',
+    route: contractRoute
+  },
+  {
+    path: '/transaction',
+    route: transactionRoute
   },
   {
     path: '/message-queue',

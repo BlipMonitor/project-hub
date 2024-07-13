@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import http from 'http';
 import logger from '../config/logger';
-import { stellarService } from '../services';
+import { ledgerService } from '../services';
 
 /**
  * Initialize WebSocket server
@@ -62,7 +62,7 @@ const handleDisconnection = (ws: WebSocket, clients: Set<WebSocket>): void => {
  */
 const sendLatestLedger = async (ws: WebSocket): Promise<void> => {
   try {
-    const latestLedger = await stellarService.getLatestLedger();
+    const latestLedger = await ledgerService.getLatestLedger();
     ws.send(JSON.stringify({ type: 'ledger', data: latestLedger }));
   } catch (error) {
     logger.error('Error sending latest ledger:', error);
@@ -76,7 +76,7 @@ const sendLatestLedger = async (ws: WebSocket): Promise<void> => {
 const startStreaming = (clients: Set<WebSocket>): void => {
   setInterval(async () => {
     try {
-      const latestLedger = await stellarService.getLatestLedger();
+      const latestLedger = await ledgerService.getLatestLedger();
       broadcast(clients, JSON.stringify({ type: 'ledger', data: latestLedger }));
     } catch (error) {
       logger.error('Error streaming ledger updates:', error);

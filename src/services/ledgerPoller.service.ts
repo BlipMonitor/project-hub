@@ -1,4 +1,4 @@
-import { stellarService } from '../services';
+import { ledgerService } from '../services';
 import logger from '../config/logger';
 import { storeLedgerData } from './storage.service';
 
@@ -41,7 +41,7 @@ class LedgerPoller {
    */
   private async checkForNewLedgers(): Promise<void> {
     try {
-      const latestSequence = await stellarService.getLatestLedgerSequence();
+      const latestSequence = await ledgerService.getLatestLedgerSequence();
 
       if (this.lastCheckedSequence === null) {
         this.lastCheckedSequence = latestSequence;
@@ -68,7 +68,7 @@ class LedgerPoller {
     try {
       logger.info(`Processing ledger ${sequence}`);
       // Fetch the ledger data
-      const ledgerData = await stellarService.getLedgerData(sequence);
+      const ledgerData = await ledgerService.getLedgerData(sequence);
 
       // Store the ledger data in the database
       await storeLedgerData(ledgerData);
