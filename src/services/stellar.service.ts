@@ -11,6 +11,7 @@ import {
 import { parseContractInvocation, parseContractState } from '../utils/contractParser';
 import { storeContractInvocation, storeContractState } from './storage.service';
 import eventProcessor from './eventProcessor.service';
+import logger from '../config/logger';
 
 /**
  * Get account details
@@ -199,13 +200,14 @@ const getLedgerData = async (
   sequence: number
 ): Promise<StellarSdk.Horizon.ServerApi.LedgerRecord> => {
   try {
-    const ledgerPage = await server.ledgers().ledger(sequence).call();
+    const ledger = await server.ledgers().ledger(sequence).call();
+    logger.info(`Fetched ledger data ${sequence}: ${JSON.stringify(ledger, null, 2)}`);
 
-    if (!ledgerPage || !ledgerPage.records || ledgerPage.records.length === 0) {
+    if (!ledger || !ledger.records || ledger.records.length === 0) {
       throw new Error('No ledger records found');
     }
 
-    return ledgerPage.records[0];
+    return ledger.records[0];
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(`Failed to get ledger data: ${error.message}`);
