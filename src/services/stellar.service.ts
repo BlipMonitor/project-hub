@@ -32,8 +32,23 @@ const getAccountDetails = async (
 };
 
 /**
- * TODO: Get all accounts
+ * Get all accounts
+ * @returns {Promise<StellarSdk.Horizon.AccountResponse[]>}
  */
+const getAllAccounts = async (): Promise<StellarSdk.Horizon.AccountResponse[]> => {
+  try {
+    const accounts = await server.accounts().call();
+    const accountDetailsPromises = accounts.records.map((account) =>
+      server.loadAccount(account.account_id)
+    );
+    return await Promise.all(accountDetailsPromises);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get all accounts: ${error.message}`);
+    }
+    throw new Error('Failed to get all accounts: Unknown error');
+  }
+};
 
 /**
  * Get latest ledger
@@ -70,7 +85,7 @@ const getLatestLedgerSequence = async (): Promise<number> => {
 /**
  * Get transaction details
  * @param {string} transactionHash - The transaction hash
- * @returns {Promise<StellarSdk.Horizon.ServerApi.TransactionRecord>}
+ * @returns {Promise<StellarSdk.Horizon.Serv>}
  */
 const getTransactionDetails = async (
   transactionHash: string
@@ -87,8 +102,21 @@ const getTransactionDetails = async (
 };
 
 /**
- * TODO: Get all transactions
+ * Get all transactions
+ * @returns {Promise<StellarSdk.Horizon.ServerApi.TransactionRecord[]>}
  */
+const getAllTransactions = async (): Promise<StellarSdk.Horizon.ServerApi.TransactionRecord[]> => {
+  try {
+    const transactions = await server.transactions().call();
+
+    return transactions.records;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get all transactions: ${error.message}`);
+    }
+    throw new Error('Failed to get all transactions: Unknown error');
+  }
+};
 
 /**
  * Get Soroban contract data
@@ -164,9 +192,11 @@ const processContractEvents = async (events: ContractEvent[]): Promise<void> => 
 
 export default {
   getAccountDetails,
+  getAllAccounts,
   getLatestLedger,
   getLatestLedgerSequence,
   getTransactionDetails,
+  getAllTransactions,
   getSorobanContractData,
   handleContractInvocation,
   processContractEvents

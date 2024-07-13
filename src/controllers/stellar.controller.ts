@@ -11,6 +11,11 @@ const getAccountDetails = catchAsync(async (req, res) => {
   res.send(accountDetails);
 });
 
+const getAllAccounts = catchAsync(async (req, res) => {
+  const accounts = await stellarService.getAllAccounts();
+  res.send(accounts);
+});
+
 const getLatestLedger = catchAsync(async (req, res) => {
   const latestLedger = await stellarService.getLatestLedger();
   res.send(latestLedger);
@@ -22,6 +27,11 @@ const getTransactionDetails = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Transaction not found');
   }
   res.send(transactionDetails);
+});
+
+const getAllTransactions = catchAsync(async (req, res) => {
+  const transactions = await stellarService.getAllTransactions();
+  res.send(transactions);
 });
 
 const getSorobanContractData = catchAsync(async (req, res) => {
@@ -43,8 +53,10 @@ const processContractEvents = catchAsync(async (req, res) => {
 
 export default {
   getAccountDetails,
+  getAllAccounts,
   getLatestLedger,
   getTransactionDetails,
+  getAllTransactions,
   getSorobanContractData,
   handleContractInvocation,
   processContractEvents

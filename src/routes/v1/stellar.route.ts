@@ -10,12 +10,14 @@ router.get(
   validate(stellarValidation.getAccountDetails),
   stellarController.getAccountDetails
 );
+router.get('/accounts', stellarController.getAllAccounts);
 router.get('/ledger/latest', stellarController.getLatestLedger);
 router.get(
   '/transaction/:transactionHash',
   validate(stellarValidation.getTransactionDetails),
   stellarController.getTransactionDetails
 );
+router.get('/transactions', stellarController.getAllTransactions);
 router.get(
   '/soroban/contract/:contractId',
   validate(stellarValidation.getSorobanContractData),
@@ -66,6 +68,26 @@ export default router;
 
 /**
  * @swagger
+ * /stellar/accounts:
+ *   get:
+ *     summary: Get all accounts
+ *     description: Retrieve details for all Stellar accounts.
+ *     tags: [Stellar]
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ *       "500":
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
+/**
+ * @swagger
  * /stellar/ledger/latest:
  *   get:
  *     summary: Get latest ledger
@@ -107,6 +129,26 @@ export default router;
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /stellar/transactions:
+ *   get:
+ *     summary: Get all transactions
+ *     description: Retrieve details for all Stellar transactions.
+ *     tags: [Stellar]
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       "500":
+ *         $ref: '#/components/responses/InternalServerError'
  */
 
 /**
