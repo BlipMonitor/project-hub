@@ -35,10 +35,17 @@ const handleContractInvocation = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const processContractEvents = catchAsync(async (req, res) => {
+  const events = req.body;
+  await stellarService.processContractEvents(events);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 export default {
   getAccountDetails,
   getLatestLedger,
   getTransactionDetails,
   getSorobanContractData,
-  handleContractInvocation
+  handleContractInvocation,
+  processContractEvents
 };

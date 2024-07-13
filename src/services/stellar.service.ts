@@ -2,9 +2,15 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import { xdr } from '@stellar/stellar-sdk';
 import config from '../config/config';
 import { server } from '../config/stellar';
-import { SorobanContractData, ContractState, ContractInvocation } from '../types/soroban';
+import {
+  SorobanContractData,
+  ContractState,
+  ContractInvocation,
+  ContractEvent
+} from '../types/soroban';
 import { parseContractInvocation, parseContractState } from '../utils/contractParser';
 import { storeContractInvocation, storeContractState } from './storage.service';
+import eventProcessor from './eventProcessor.service';
 
 /**
  * Get account details
@@ -145,11 +151,23 @@ const handleContractInvocation = async (
   }
 };
 
+/**
+ * Process contract events
+ * @param {ContractEvent[]} events - The contract events
+ * @returns {Promise<void>}
+ */
+const processContractEvents = async (events: ContractEvent[]): Promise<void> => {
+  for (const event of events) {
+    await eventProcessor.processEvent(event);
+  }
+};
+
 export default {
   getAccountDetails,
   getLatestLedger,
   getLatestLedgerSequence,
   getTransactionDetails,
   getSorobanContractData,
-  handleContractInvocation
+  handleContractInvocation,
+  processContractEvents
 };

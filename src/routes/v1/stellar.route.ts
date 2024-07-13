@@ -26,6 +26,7 @@ router.post(
   validate(stellarValidation.invokeContract),
   stellarController.handleContractInvocation
 );
+router.post('/soroban/contract/events', stellarController.processContractEvents);
 
 export default router;
 
@@ -155,4 +156,24 @@ export default router;
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ContractInvocation'
+ */
+
+/**
+ * @swagger
+ * /stellar/soroban/contract/events:
+ *   post:
+ *     summary: Process contract events
+ *     description: Process contract events.
+ *     tags: [Stellar]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/ContractEvent'
+ *     responses:
+ *       "204":
+ *         description: No Content
  */
