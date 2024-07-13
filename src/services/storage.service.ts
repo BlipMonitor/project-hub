@@ -43,8 +43,10 @@ export const storeLedgerData = async (
   await prisma.ledger.create({
     data: {
       sequence: ledgerData.sequence,
-      transactionCount: ledgerData.transaction_count,
+      successfulTransactionCount: ledgerData.successful_transaction_count,
+      failedTransactionCount: ledgerData.failed_transaction_count,
       operationCount: ledgerData.operation_count,
+      txSetOperationCount: ledgerData.tx_set_operation_count ?? 0, // Provide default value if null
       closedAt: new Date(ledgerData.closed_at),
       totalCoins: ledgerData.total_coins,
       feePool: ledgerData.fee_pool,
@@ -53,7 +55,9 @@ export const storeLedgerData = async (
       maxTxSetSize: ledgerData.max_tx_set_size,
       protocolVersion: ledgerData.protocol_version,
       ledgerHash: ledgerData.hash,
-      previousLedgerHash: ledgerData.prev_hash
+      previousLedgerHash: ledgerData.prev_hash,
+      pagingToken: ledgerData.paging_token,
+      headerXdr: ledgerData.header_xdr
     }
   });
 };

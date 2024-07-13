@@ -56,19 +56,23 @@ model ContractState {
 }
 
 model Ledger {
-  id                Int      @id @default(autoincrement())
-  sequence          Int
-  transactionCount  Int
-  operationCount    Int
-  closedAt          DateTime
-  totalCoins        String
-  feePool           String
-  baseFee           Int
-  baseReserve       Int
-  maxTxSetSize      Int
-  protocolVersion   Int
-  ledgerHash        String
-  previousLedgerHash String
+  id                    Int      @id @default(autoincrement())
+  sequence              Int
+  successfulTransactionCount Int
+  failedTransactionCount Int
+  operationCount        Int
+  txSetOperationCount   Int
+  closedAt              DateTime
+  totalCoins            String
+  feePool               String
+  baseFee               Int
+  baseReserve           Int
+  maxTxSetSize          Int
+  protocolVersion       Int
+  ledgerHash            String
+  previousLedgerHash    String
+  pagingToken           String
+  headerXdr             String
 }
 
 enum Role {
