@@ -1,5 +1,6 @@
 import { stellarService } from '../services';
 import logger from '../config/logger';
+import { storeLedgerData } from './storage.service';
 
 class LedgerPoller {
   private lastCheckedSequence: number | null = null;
@@ -64,9 +65,21 @@ class LedgerPoller {
    * @returns {Promise<void>}
    */
   private async processLedger(sequence: number): Promise<void> {
-    // TODO: Implement ledger processing logic
-    // This could include storing ledger data, emitting events, etc.
-    logger.info(`Processing ledger ${sequence}`);
+    try {
+      logger.info(`Processing ledger ${sequence}`);
+      // Fetch the ledger data
+      const ledgerData = await stellarService.getLedgerData(sequence);
+
+      // Store the ledger data in the database
+      await storeLedgerData(ledgerData);
+
+      // Emit events if necessary
+      // Example: eventEmitter.emit('ledgerProcessed', ledgerData);
+
+      logger.info(`Processed ledger ${sequence}`);
+    } catch (error) {
+      logger.error(`Error processing ledger ${sequence}:`, error);
+    }
   }
 }
 

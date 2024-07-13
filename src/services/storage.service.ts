@@ -1,3 +1,4 @@
+import * as StellarSdk from '@stellar/stellar-sdk';
 import prisma from '../client';
 import { ContractInvocation, ContractState } from '../types/soroban';
 import { serializeScVal } from '../utils/sorobanTypes';
@@ -27,6 +28,32 @@ export const storeContractState = async (state: ContractState): Promise<void> =>
     data: {
       contractId: state.contractId.toString(), // Convert to string
       state: serializeScVal(state.state) // Convert to JSON-compatible type
+    }
+  });
+};
+
+/**
+ * Store ledger data
+ * @param {StellarSdk.Horizon.ServerApi.LedgerRecord} ledgerData - The ledger data
+ * @returns {Promise<void>}
+ */
+export const storeLedgerData = async (
+  ledgerData: StellarSdk.Horizon.ServerApi.LedgerRecord
+): Promise<void> => {
+  await prisma.ledger.create({
+    data: {
+      sequence: ledgerData.sequence,
+      transactionCount: ledgerData.transaction_count,
+      operationCount: ledgerData.operation_count,
+      closedAt: new Date(ledgerData.closed_at),
+      totalCoins: ledgerData.total_coins,
+      feePool: ledgerData.fee_pool,
+      baseFee: ledgerData.base_fee_in_stroops,
+      baseReserve: ledgerData.base_reserve_in_stroops,
+      maxTxSetSize: ledgerData.max_tx_set_size,
+      protocolVersion: ledgerData.protocol_version,
+      ledgerHash: ledgerData.hash,
+      previousLedgerHash: ledgerData.prev_hash
     }
   });
 };

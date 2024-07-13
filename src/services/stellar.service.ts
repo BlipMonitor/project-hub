@@ -190,6 +190,30 @@ const processContractEvents = async (events: ContractEvent[]): Promise<void> => 
   }
 };
 
+/**
+ * Get ledger data
+ * @param {number} sequence - Ledger sequence number
+ * @returns {Promise<StellarSdk.Horizon.ServerApi.LedgerRecord>}
+ */
+const getLedgerData = async (
+  sequence: number
+): Promise<StellarSdk.Horizon.ServerApi.LedgerRecord> => {
+  try {
+    const ledgerPage = await server.ledgers().ledger(sequence).call();
+
+    if (!ledgerPage || !ledgerPage.records || ledgerPage.records.length === 0) {
+      throw new Error('No ledger records found');
+    }
+
+    return ledgerPage.records[0];
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get ledger data: ${error.message}`);
+    }
+    throw new Error('Failed to get ledger data: Unknown error');
+  }
+};
+
 export default {
   getAccountDetails,
   getAllAccounts,
@@ -199,5 +223,6 @@ export default {
   getAllTransactions,
   getSorobanContractData,
   handleContractInvocation,
-  processContractEvents
+  processContractEvents,
+  getLedgerData
 };

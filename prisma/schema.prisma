@@ -55,6 +55,22 @@ model ContractState {
   createdAt     DateTime @default(now())
 }
 
+model Ledger {
+  id                Int      @id @default(autoincrement())
+  sequence          Int
+  transactionCount  Int
+  operationCount    Int
+  closedAt          DateTime
+  totalCoins        String
+  feePool           String
+  baseFee           Int
+  baseReserve       Int
+  maxTxSetSize      Int
+  protocolVersion   Int
+  ledgerHash        String
+  previousLedgerHash String
+}
+
 enum Role {
   USER
   ADMIN
