@@ -111,6 +111,42 @@ model ResponseTime {
   timestamp      DateTime @default(now())
 }
 
+model DailyTransactionVolume {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  transactionCount Int
+  date           DateTime @default(now())
+}
+
+model DailyErrorRate {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  errorType      String
+  errorCount     Int
+  date           DateTime @default(now())
+}
+
+model DailyGasUsage {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  gasUsed        Int
+  date           DateTime @default(now())
+}
+
+model DailyUniqueUsers {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  uniqueUsers    Int
+  date           DateTime @default(now())
+}
+
+model DailyResponseTime {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  averageResponseTime Int
+  date           DateTime @default(now())
+}
+
 enum Role {
   USER
   ADMIN

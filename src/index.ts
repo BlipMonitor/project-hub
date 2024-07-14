@@ -6,6 +6,7 @@ import config from './config/config';
 import logger from './config/logger';
 import { websocketService } from './services';
 import { ledgerPoller } from './services/ledgerPoller.service';
+import { startScheduler } from './utils/scheduler'; // Import the named function
 
 let server: Server;
 let wss: WebSocket.Server;
@@ -27,6 +28,9 @@ prisma.$connect().then(() => {
     });
 
     websocketService.startStreaming(clients);
+
+    // Start the scheduler
+    startScheduler(); // Start the scheduler
   });
 });
 
