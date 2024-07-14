@@ -5,12 +5,13 @@ import { accountController } from '../../controllers';
 
 const router = express.Router();
 
+router.get('/', validate(accountValidation.getAllAccounts), accountController.getAllAccounts);
+
 router.get(
   '/:accountId',
   validate(accountValidation.getAccountDetails),
   accountController.getAccountDetails
 );
-router.get('/', accountController.getAllAccounts);
 
 export default router;
 
@@ -19,6 +20,26 @@ export default router;
  * tags:
  *   name: Account
  *   description: Account operations
+ */
+
+/**
+ * @swagger
+ * /account:
+ *   get:
+ *     summary: Get all accounts
+ *     description: Retrieve details for all Stellar accounts.
+ *     tags: [Account]
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Account'
+ *       "500":
+ *         $ref: '#/components/responses/InternalServerError'
  */
 
 /**
@@ -46,24 +67,4 @@ export default router;
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /account:
- *   get:
- *     summary: Get all accounts
- *     description: Retrieve details for all Stellar accounts.
- *     tags: [Account]
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Account'
- *       "500":
- *         $ref: '#/components/responses/InternalServerError'
  */

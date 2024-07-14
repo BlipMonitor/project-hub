@@ -10,12 +10,18 @@ router.get(
   validate(contractValidation.getContractData),
   contractController.getContractData
 );
+
 router.post(
   '/invoke',
   validate(contractValidation.invokeContract),
   contractController.handleContractInvocation
 );
-router.post('/events', contractController.processContractEvents);
+
+router.post(
+  '/events',
+  validate(contractValidation.processContractEvents),
+  contractController.processContractEvents
+);
 
 export default router;
 

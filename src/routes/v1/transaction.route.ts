@@ -6,11 +6,16 @@ import { transactionController } from '../../controllers';
 const router = express.Router();
 
 router.get(
+  '/',
+  validate(transactionValidation.getAllTransactions),
+  transactionController.getAllTransactions
+);
+
+router.get(
   '/:transactionHash',
   validate(transactionValidation.getTransactionDetails),
   transactionController.getTransactionDetails
 );
-router.get('/', transactionController.getAllTransactions);
 
 export default router;
 
@@ -19,6 +24,26 @@ export default router;
  * tags:
  *   name: Transaction
  *   description: Transaction operations
+ */
+
+/**
+ * @swagger
+ * /transaction:
+ *   get:
+ *     summary: Get all transactions
+ *     description: Retrieve details for all Stellar transactions.
+ *     tags: [Transaction]
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       "500":
+ *         $ref: '#/components/responses/InternalServerError'
  */
 
 /**
@@ -46,24 +71,4 @@ export default router;
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
- * /transaction:
- *   get:
- *     summary: Get all transactions
- *     description: Retrieve details for all Stellar transactions.
- *     tags: [Transaction]
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Transaction'
- *       "500":
- *         $ref: '#/components/responses/InternalServerError'
  */

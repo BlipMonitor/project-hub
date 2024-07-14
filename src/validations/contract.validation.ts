@@ -14,7 +14,21 @@ const invokeContract = {
   })
 };
 
+const processContractEvents = {
+  body: Joi.array()
+    .items(
+      Joi.object().keys({
+        eventId: Joi.string().required().description('Event ID'),
+        contractId: Joi.string().required().description('Soroban contract ID'),
+        eventType: Joi.string().required().description('Event type'),
+        eventData: Joi.any().required().description('Event data')
+      })
+    )
+    .required()
+};
+
 export default {
   getContractData,
-  invokeContract
+  invokeContract,
+  processContractEvents
 };

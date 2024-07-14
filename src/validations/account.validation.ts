@@ -1,5 +1,9 @@
 import Joi from 'joi';
 
+const getAllAccounts = {
+  query: Joi.object().keys({})
+};
+
 const getAccountDetails = {
   params: Joi.object().keys({
     accountId: Joi.string().required().description('Stellar account ID')
@@ -7,5 +11,6 @@ const getAccountDetails = {
 };
 
 export default {
+  getAllAccounts,
   getAccountDetails
 };
