@@ -85,6 +85,26 @@ export const getErrorRate = async (contractId: string, timeRange: string): Promi
 };
 
 /**
+ * Get error details
+ * @param {string} contractId - The contract ID
+ * @param {string} errorType - The error type
+ * @returns {Promise<object>}
+ */
+export const getErrorDetails = async (contractId: string, errorType: string): Promise<object> => {
+  const result = await prisma.errorRate.findMany({
+    where: {
+      contractId,
+      errorType
+    },
+    select: {
+      errorCount: true,
+      timestamp: true
+    }
+  });
+  return result;
+};
+
+/**
  * Record gas usage
  * @param {string} contractId - The contract ID
  * @param {number} gasUsed - The gas used
@@ -126,6 +146,20 @@ export const getGasUsage = async (
 };
 
 /**
+ * Get average gas usage
+ * @param {string} contractId - The contract ID
+ * @param {string} timeRange - The time range
+ * @returns {Promise<number>}
+ */
+export const getAverageGasUsage = async (
+  contractId: string,
+  timeRange: string
+): Promise<number> => {
+  const { averageGas } = await getGasUsage(contractId, timeRange);
+  return averageGas;
+};
+
+/**
  * Record unique user interaction
  * @param {string} contractId - The contract ID
  * @param {string} userAddress - The user address
@@ -163,6 +197,28 @@ export const getUniqueUsers = async (contractId: string, timeRange: string): Pro
   });
   const uniqueUsers = new Set(result.map((entry) => entry.userAddress));
   return uniqueUsers.size;
+};
+
+/**
+ * Get user growth
+ * @param {string} contractId - The contract ID
+ * @param {string} timeRange - The time range
+ * @returns {Promise<object>}
+ */
+export const getUserGrowth = async (contractId: string, timeRange: string): Promise<object> => {
+  const result = await prisma.uniqueUsers.findMany({
+    where: {
+      contractId,
+      timestamp: {
+        gte: new Date(Date.now() - parseTimeRange(timeRange))
+      }
+    },
+    select: {
+      userAddress: true,
+      timestamp: true
+    }
+  });
+  return result;
 };
 
 /**
@@ -210,6 +266,31 @@ export const getResponseTime = async (
 };
 
 /**
+ * Get response time distribution
+ * @param {string} contractId - The contract ID
+ * @param {string} timeRange - The time range
+ * @returns {Promise<object>}
+ */
+export const getResponseTimeDistribution = async (
+  contractId: string,
+  timeRange: string
+): Promise<object> => {
+  const result = await prisma.responseTime.findMany({
+    where: {
+      contractId,
+      timestamp: {
+        gte: new Date(Date.now() - parseTimeRange(timeRange))
+      }
+    },
+    select: {
+      responseTime: true,
+      timestamp: true
+    }
+  });
+  return result;
+};
+
+/**
  * Parse time range
  * @param {string} timeRange - The time range
  * @returns {number}
@@ -230,10 +311,14 @@ export default {
   getTransactionVolume,
   recordError,
   getErrorRate,
+  getErrorDetails,
   recordGasUsage,
   getGasUsage,
+  getAverageGasUsage,
   recordUserInteraction,
   getUniqueUsers,
+  getUserGrowth,
   recordResponseTime,
-  getResponseTime
+  getResponseTime,
+  getResponseTimeDistribution
 };

@@ -14,7 +14,21 @@ const getErrorRate = {
   })
 };
 
+const getErrorDetails = {
+  query: Joi.object().keys({
+    contractId: Joi.string().required().description('Contract ID'),
+    errorType: Joi.string().required().description('Error type')
+  })
+};
+
 const getGasUsage = {
+  query: Joi.object().keys({
+    contractId: Joi.string().required().description('Contract ID'),
+    timeRange: Joi.string().required().description('Time range')
+  })
+};
+
+const getAverageGasUsage = {
   query: Joi.object().keys({
     contractId: Joi.string().required().description('Contract ID'),
     timeRange: Joi.string().required().description('Time range')
@@ -28,7 +42,21 @@ const getUniqueUsers = {
   })
 };
 
+const getUserGrowth = {
+  query: Joi.object().keys({
+    contractId: Joi.string().required().description('Contract ID'),
+    timeRange: Joi.string().required().description('Time range')
+  })
+};
+
 const getResponseTime = {
+  query: Joi.object().keys({
+    contractId: Joi.string().required().description('Contract ID'),
+    timeRange: Joi.string().required().description('Time range')
+  })
+};
+
+const getResponseTimeDistribution = {
   query: Joi.object().keys({
     contractId: Joi.string().required().description('Contract ID'),
     timeRange: Joi.string().required().description('Time range')
@@ -72,9 +100,13 @@ const recordResponseTime = {
 export default {
   getTransactionVolume,
   getErrorRate,
+  getErrorDetails,
   getGasUsage,
+  getAverageGasUsage,
   getUniqueUsers,
+  getUserGrowth,
   getResponseTime,
+  getResponseTimeDistribution,
   recordTransaction,
   recordError,
   recordGasUsage,

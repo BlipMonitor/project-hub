@@ -13,7 +13,19 @@ router.get(
 
 router.get('/error-rate', validate(metricsValidation.getErrorRate), metricsController.getErrorRate);
 
+router.get(
+  '/error-details',
+  validate(metricsValidation.getErrorDetails),
+  metricsController.getErrorDetails
+);
+
 router.get('/gas-usage', validate(metricsValidation.getGasUsage), metricsController.getGasUsage);
+
+router.get(
+  '/gas-usage/average',
+  validate(metricsValidation.getAverageGasUsage),
+  metricsController.getAverageGasUsage
+);
 
 router.get(
   '/unique-users',
@@ -22,9 +34,21 @@ router.get(
 );
 
 router.get(
+  '/user-growth',
+  validate(metricsValidation.getUserGrowth),
+  metricsController.getUserGrowth
+);
+
+router.get(
   '/response-time',
   validate(metricsValidation.getResponseTime),
   metricsController.getResponseTime
+);
+
+router.get(
+  '/response-time/distribution',
+  validate(metricsValidation.getResponseTimeDistribution),
+  metricsController.getResponseTimeDistribution
 );
 
 router.post(
@@ -136,6 +160,48 @@ export default router;
 
 /**
  * @swagger
+ * /metrics/error-details:
+ *   get:
+ *     summary: Get error details
+ *     description: Retrieve error details for a contract.
+ *     tags: [Metrics]
+ *     parameters:
+ *       - in: query
+ *         name: contractId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Contract ID
+ *       - in: query
+ *         name: errorType
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Error type
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errorDetails:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       errorCount:
+ *                         type: number
+ *                       timestamp:
+ *                         type: string
+ *                         format: date-time
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ */
+
+/**
+ * @swagger
  * /metrics/gas-usage:
  *   get:
  *     summary: Get gas usage
@@ -165,6 +231,40 @@ export default router;
  *                 totalGas:
  *                   type: number
  *                 averageGas:
+ *                   type: number
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ */
+
+/**
+ * @swagger
+ * /metrics/gas-usage/average:
+ *   get:
+ *     summary: Get average gas usage
+ *     description: Retrieve average gas usage for a contract.
+ *     tags: [Metrics]
+ *     parameters:
+ *       - in: query
+ *         name: contractId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Contract ID
+ *       - in: query
+ *         name: timeRange
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Time range
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 averageGasUsage:
  *                   type: number
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
@@ -206,6 +306,48 @@ export default router;
 
 /**
  * @swagger
+ * /metrics/user-growth:
+ *   get:
+ *     summary: Get user growth
+ *     description: Retrieve user growth for a contract.
+ *     tags: [Metrics]
+ *     parameters:
+ *       - in: query
+ *         name: contractId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Contract ID
+ *       - in: query
+ *         name: timeRange
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Time range
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userGrowth:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       userAddress:
+ *                         type: string
+ *                       timestamp:
+ *                         type: string
+ *                         format: date-time
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ */
+
+/**
+ * @swagger
  * /metrics/response-time:
  *   get:
  *     summary: Get response time
@@ -236,6 +378,48 @@ export default router;
  *                   type: number
  *                 totalResponseTime:
  *                   type: number
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ */
+
+/**
+ * @swagger
+ * /metrics/response-time/distribution:
+ *   get:
+ *     summary: Get response time distribution
+ *     description: Retrieve response time distribution for a contract.
+ *     tags: [Metrics]
+ *     parameters:
+ *       - in: query
+ *         name: contractId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Contract ID
+ *       - in: query
+ *         name: timeRange
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Time range
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 responseTimeDistribution:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       responseTime:
+ *                         type: number
+ *                       timestamp:
+ *                         type: string
+ *                         format: date-time
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  */

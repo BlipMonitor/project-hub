@@ -24,6 +24,18 @@ const getErrorRate = catchAsync(async (req, res) => {
   res.send({ errorRate });
 });
 
+const getErrorDetails = catchAsync(async (req, res) => {
+  const { contractId, errorType } = req.query;
+  if (!contractId || !errorType) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Contract ID and error type are required');
+  }
+  const errorDetails = await metricsService.getErrorDetails(
+    contractId as string,
+    errorType as string
+  );
+  res.send(errorDetails);
+});
+
 const getGasUsage = catchAsync(async (req, res) => {
   const { contractId, timeRange } = req.query;
   if (!contractId || !timeRange) {
@@ -31,6 +43,18 @@ const getGasUsage = catchAsync(async (req, res) => {
   }
   const gasUsage = await metricsService.getGasUsage(contractId as string, timeRange as string);
   res.send(gasUsage);
+});
+
+const getAverageGasUsage = catchAsync(async (req, res) => {
+  const { contractId, timeRange } = req.query;
+  if (!contractId || !timeRange) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Contract ID and time range are required');
+  }
+  const averageGasUsage = await metricsService.getAverageGasUsage(
+    contractId as string,
+    timeRange as string
+  );
+  res.send(averageGasUsage);
 });
 
 const getUniqueUsers = catchAsync(async (req, res) => {
@@ -45,6 +69,15 @@ const getUniqueUsers = catchAsync(async (req, res) => {
   res.send({ uniqueUsers });
 });
 
+const getUserGrowth = catchAsync(async (req, res) => {
+  const { contractId, timeRange } = req.query;
+  if (!contractId || !timeRange) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Contract ID and time range are required');
+  }
+  const userGrowth = await metricsService.getUserGrowth(contractId as string, timeRange as string);
+  res.send(userGrowth);
+});
+
 const getResponseTime = catchAsync(async (req, res) => {
   const { contractId, timeRange } = req.query;
   if (!contractId || !timeRange) {
@@ -55,6 +88,18 @@ const getResponseTime = catchAsync(async (req, res) => {
     timeRange as string
   );
   res.send(responseTime);
+});
+
+const getResponseTimeDistribution = catchAsync(async (req, res) => {
+  const { contractId, timeRange } = req.query;
+  if (!contractId || !timeRange) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Contract ID and time range are required');
+  }
+  const responseTimeDistribution = await metricsService.getResponseTimeDistribution(
+    contractId as string,
+    timeRange as string
+  );
+  res.send(responseTimeDistribution);
 });
 
 const recordTransaction = catchAsync(async (req, res) => {
@@ -105,9 +150,13 @@ const recordResponseTime = catchAsync(async (req, res) => {
 export default {
   getTransactionVolume,
   getErrorRate,
+  getErrorDetails,
   getGasUsage,
+  getAverageGasUsage,
   getUniqueUsers,
+  getUserGrowth,
   getResponseTime,
+  getResponseTimeDistribution,
   recordTransaction,
   recordError,
   recordGasUsage,
