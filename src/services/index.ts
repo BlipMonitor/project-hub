@@ -8,3 +8,4 @@ export { default as transactionService } from './transaction.service';
 export { default as contractService } from './contract.service';
 export { default as websocketService } from './websocket.service';
 export { default as messageQueueService } from './messageQueue.service';
+export { default as metricsService } from './metrics.service';

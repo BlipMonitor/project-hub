@@ -5,3 +5,4 @@ export { default as ledgerController } from './ledger.controller';
 export { default as transactionController } from './transaction.controller';
 export { default as contractController } from './contract.controller';
 export { default as messageQueueController } from './messageQueue.controller';
+export { default as metricsController } from './metrics.controller';

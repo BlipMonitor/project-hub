@@ -75,6 +75,42 @@ model Ledger {
   headerXdr             String
 }
 
+model TransactionVolume {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  transactionCount Int
+  timestamp      DateTime @default(now())
+}
+
+model ErrorRate {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  errorType      String
+  errorCount     Int
+  timestamp      DateTime @default(now())
+}
+
+model GasUsage {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  gasUsed        Int
+  timestamp      DateTime @default(now())
+}
+
+model UniqueUsers {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  userAddress    String
+  timestamp      DateTime @default(now())
+}
+
+model ResponseTime {
+  id             Int      @id @default(autoincrement())
+  contractId     String
+  responseTime   Int
+  timestamp      DateTime @default(now())
+}
+
 enum Role {
   USER
   ADMIN

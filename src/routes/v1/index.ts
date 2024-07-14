@@ -6,6 +6,7 @@ import ledgerRoute from './ledger.route';
 import contractRoute from './contract.route';
 import transactionRoute from './transaction.route';
 import messageQueueRoute from './messageQueue.route';
+import metricsRoute from './metrics.route';
 import docsRoute from './docs.route';
 import config from '../../config/config';
 
@@ -39,6 +40,10 @@ const defaultRoutes = [
   {
     path: '/message-queue',
     route: messageQueueRoute
+  },
+  {
+    path: '/metrics',
+    route: metricsRoute
   }
 ];
 
