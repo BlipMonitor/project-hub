@@ -58,9 +58,21 @@ To verify your email, click on this link: ${verificationEmailUrl}`;
   await sendEmail(to, subject, text);
 };
 
+/**
+ * Send alert email
+ * @param {string} to
+ * @param {string} subject
+ * @param {string} text
+ * @returns {Promise}
+ */
+const sendAlertEmail = async (to: string, subject: string, text: string) => {
+  await sendEmail(to, subject, text);
+};
+
 export default {
   transport,
   sendEmail,
   sendResetPasswordEmail,
-  sendVerificationEmail
+  sendVerificationEmail,
+  sendAlertEmail
 };

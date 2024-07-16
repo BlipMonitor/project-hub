@@ -1,10 +1,14 @@
 import prisma from '../client';
+import config from '../config/config';
 import {
   getAverageGasUsage,
   getResponseTime,
   getUniqueUsers,
   getUserGrowth
 } from './metrics.service';
+import emailService from './email.service';
+import dotenv from 'dotenv';
+dotenv.config();
 
 /**
  * Check for high error rate
@@ -45,7 +49,7 @@ const checkHighErrorRate = async (
         details: { errorRate }
       }
     });
-    await createNotification(alert.id, 'High Error Rate Alert', 'admin@example.com');
+    await createNotification(alert.id, 'High Error Rate Alert');
   }
 };
 
@@ -91,11 +95,7 @@ const checkUnusualTransactionVolumeSpike = async (
         details: { volumeSpike }
       }
     });
-    await createNotification(
-      alert.id,
-      'Unusual Transaction Volume Spike Alert',
-      'admin@example.com'
-    );
+    await createNotification(alert.id, 'Unusual Transaction Volume Spike Alert');
   }
 };
 
@@ -121,7 +121,7 @@ const checkHighGasUsage = async (
         details: { averageGasUsage }
       }
     });
-    await createNotification(alert.id, 'High Gas Usage Alert', 'admin@example.com');
+    await createNotification(alert.id, 'High Gas Usage Alert');
   }
 };
 
@@ -148,7 +148,7 @@ const checkSlowResponseTime = async (
         details: { averageResponseTime }
       }
     });
-    await createNotification(alert.id, 'Slow Response Time Alert', 'admin@example.com');
+    await createNotification(alert.id, 'Slow Response Time Alert');
   }
 };
 
@@ -177,7 +177,7 @@ const checkUnusualUserActivity = async (
         details: { userActivitySpike }
       }
     });
-    await createNotification(alert.id, 'Unusual User Activity Alert', 'admin@example.com');
+    await createNotification(alert.id, 'Unusual User Activity Alert');
   }
 };
 
@@ -187,7 +187,11 @@ const checkUnusualUserActivity = async (
  * @param {string} notificationType - The type of notification
  * @param {string} recipient - The recipient of the notification
  */
-const createNotification = async (alertId: number, notificationType: string, recipient: string) => {
+const createNotification = async (
+  alertId: number,
+  notificationType: string,
+  recipient: string = config.email.exampleEmail
+) => {
   await prisma.notification.create({
     data: {
       alertId,
@@ -196,13 +200,33 @@ const createNotification = async (alertId: number, notificationType: string, rec
       status: 'sent'
     }
   });
+
+  // Send email notification
+  const subject = `${notificationType}`;
+  const text = `An alert has been triggered: ${notificationType}. Please check the system for more details.`;
+  await emailService.sendAlertEmail(recipient, subject, text);
 };
 
 /**
- * Process alerts for a contract
+ * Process alerts for all contracts
  * @param {string} contractAddress - The contract address
  */
-const processAlerts = async (contractAddress: string) => {
+const processAlerts = async (contractAddress?: string) => {
+  if (contractAddress) {
+    await processAlertsForContract(contractAddress);
+  } else {
+    const contracts = await prisma.contractInvocation.findMany();
+    for (const contract of contracts) {
+      await processAlertsForContract(contract.contractId);
+    }
+  }
+};
+
+/**
+ * Process alerts for a specific contract
+ * @param {string} contractAddress - The contract address
+ */
+const processAlertsForContract = async (contractAddress: string) => {
   const alertConfigs = await prisma.alertConfiguration.findMany({
     where: { contractAddress, enabled: true }
   });
@@ -238,5 +262,6 @@ export default {
   checkHighGasUsage,
   checkSlowResponseTime,
   checkUnusualUserActivity,
-  processAlerts
+  processAlerts,
+  processAlertsForContract
 };
