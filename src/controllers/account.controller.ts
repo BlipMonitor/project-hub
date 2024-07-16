@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
+
+import { accountService } from '../services';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { accountService } from '../services';
 
 const getAccountDetails = catchAsync(async (req, res) => {
   const accountDetails = await accountService.getAccountDetails(req.params.accountId);

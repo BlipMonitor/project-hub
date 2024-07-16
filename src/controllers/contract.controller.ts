@@ -1,6 +1,7 @@
 import httpStatus from 'http-status';
-import catchAsync from '../utils/catchAsync';
+
 import { contractService } from '../services';
+import catchAsync from '../utils/catchAsync';
 
 const getContractData = catchAsync(async (req, res) => {
   const contractData = await contractService.getContractData(req.params.contractId);

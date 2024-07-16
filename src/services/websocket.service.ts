@@ -1,7 +1,8 @@
-import WebSocket from 'ws';
 import http from 'http';
+import WebSocket from 'ws';
+
 import logger from '../config/logger';
-import { ledgerService, alertService } from '../services';
+import { alertService, ledgerService } from '../services';
 
 /**
  * Initialize WebSocket server

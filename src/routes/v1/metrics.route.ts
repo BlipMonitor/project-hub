@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { metricsController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { metricsValidation } from '../../validations';
-import { metricsController } from '../../controllers';
 
 const router = express.Router();
 

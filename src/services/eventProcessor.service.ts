@@ -1,7 +1,7 @@
-import { ContractEvent } from '../types/soroban';
-import { storeContractState } from './storage.service';
-import { parseContractState } from '../utils/contractParser';
 import logger from '../config/logger';
+import { ContractEvent } from '../types/soroban';
+import { parseContractState } from '../utils/contractParser';
+import { storeContractState } from './storage.service';
 
 class EventProcessor {
   /**

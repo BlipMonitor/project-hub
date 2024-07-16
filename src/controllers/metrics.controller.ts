@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
-import catchAsync from '../utils/catchAsync';
+
 import { metricsService } from '../services';
 import ApiError from '../utils/ApiError';
+import catchAsync from '../utils/catchAsync';
 
 const getTransactionVolume = catchAsync(async (req, res) => {
   const { contractId, timeRange } = req.query;

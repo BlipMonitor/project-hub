@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { transactionController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { transactionValidation } from '../../validations';
-import { transactionController } from '../../controllers';
 
 const router = express.Router();
 

@@ -1,6 +1,7 @@
-import { ErrorRequestHandler } from 'express';
 import { Prisma } from '@prisma/client';
+import { ErrorRequestHandler } from 'express';
 import httpStatus from 'http-status';
+
 import config from '../config/config';
 import logger from '../config/logger';
 import ApiError from '../utils/ApiError';
@@ -18,7 +19,7 @@ export const errorConverter: ErrorRequestHandler = (err, req, res, next) => {
   next(error);
 };
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
   if (config.env === 'production' && !err.isOperational) {

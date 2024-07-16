@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
+
+import { messageQueueService } from '../services';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { messageQueueService } from '../services';
 
 const enqueueMessage = catchAsync(async (req, res) => {
   const { content, priority } = req.body;

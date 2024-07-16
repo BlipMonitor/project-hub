@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { accountController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { accountValidation } from '../../validations';
-import { accountController } from '../../controllers';
 
 const router = express.Router();
 

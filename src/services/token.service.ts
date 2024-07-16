@@ -1,12 +1,13 @@
+import { Token, TokenType } from '@prisma/client';
+import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import moment, { Moment } from 'moment';
-import httpStatus from 'http-status';
-import config from '../config/config';
-import userService from './user.service';
-import ApiError from '../utils/ApiError';
-import { Token, TokenType } from '@prisma/client';
+
 import prisma from '../client';
+import config from '../config/config';
 import { AuthTokensResponse } from '../types/response';
+import ApiError from '../utils/ApiError';
+import userService from './user.service';
 
 /**
  * Generate token

@@ -1,14 +1,19 @@
+import dotenv from 'dotenv';
+import { WebSocket } from 'ws';
+
 import prisma from '../client';
 import config from '../config/config';
+import { websocketService } from '../services';
+import { sendAlertEmail } from './email.service';
 import {
   getAverageGasUsage,
   getResponseTime,
   getUniqueUsers,
   getUserGrowth
 } from './metrics.service';
-import emailService from './email.service';
-import dotenv from 'dotenv';
 dotenv.config();
+
+const clients = new Set<WebSocket>();
 
 /**
  * Check for high error rate
@@ -204,7 +209,16 @@ const createNotification = async (
   // Send email notification
   const subject = `${notificationType}`;
   const text = `An alert has been triggered: ${notificationType}. Please check the system for more details.`;
-  await emailService.sendAlertEmail(recipient, subject, text);
+  await sendAlertEmail(recipient, subject, text);
+
+  // Broadcast the alert via WebSocket
+  const alertMessage = JSON.stringify({
+    type: 'newAlert',
+    alertId,
+    notificationType,
+    recipient
+  });
+  websocketService.broadcast(clients, alertMessage);
 };
 
 /**

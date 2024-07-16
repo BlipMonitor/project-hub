@@ -1,8 +1,9 @@
-import httpStatus from 'http-status';
-import catchAsync from '../utils/catchAsync';
-import { authService, userService, tokenService, emailService } from '../services';
-import exclude from '../utils/exclude';
 import { User } from '@prisma/client';
+import httpStatus from 'http-status';
+
+import { authService, emailService, tokenService, userService } from '../services';
+import catchAsync from '../utils/catchAsync';
+import exclude from '../utils/exclude';
 
 const register = catchAsync(async (req, res) => {
   const { email, password } = req.body;

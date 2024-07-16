@@ -1,14 +1,15 @@
 import express from 'express';
-import authRoute from './auth.route';
-import userRoute from './user.route';
+
+import config from '../../config/config';
 import accountRoute from './account.route';
-import ledgerRoute from './ledger.route';
+import authRoute from './auth.route';
 import contractRoute from './contract.route';
-import transactionRoute from './transaction.route';
+import docsRoute from './docs.route';
+import ledgerRoute from './ledger.route';
 import messageQueueRoute from './messageQueue.route';
 import metricsRoute from './metrics.route';
-import docsRoute from './docs.route';
-import config from '../../config/config';
+import transactionRoute from './transaction.route';
+import userRoute from './user.route';
 
 const router = express.Router();
 

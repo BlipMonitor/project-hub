@@ -1,7 +1,8 @@
 import cron from 'node-cron';
-import dailyAggregationService from '../services/dailyAggregation.service';
-import { alertService } from '../services';
+
 import logger from '../config/logger';
+import { alertService } from '../services';
+import dailyAggregationService from '../services/dailyAggregation.service';
 
 // Schedule tasks to run at midnight every day
 export const startScheduler = () => {

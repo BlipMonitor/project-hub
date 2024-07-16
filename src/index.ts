@@ -1,5 +1,6 @@
 import { Server } from 'http';
 import WebSocket from 'ws';
+
 import app from './app';
 import prisma from './client';
 import config from './config/config';

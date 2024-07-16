@@ -1,5 +1,5 @@
-import { ledgerService } from '../services';
 import logger from '../config/logger';
+import { ledgerService } from '../services';
 import { storeLedgerData } from './storage.service';
 
 class LedgerPoller {

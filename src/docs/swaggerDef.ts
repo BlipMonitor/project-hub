@@ -1,4 +1,4 @@
-import { name, version, repository } from '../../package.json';
+import { name, repository, version } from '../../package.json';
 import config from '../config/config';
 
 const swaggerDef = {

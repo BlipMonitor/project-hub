@@ -1,7 +1,8 @@
 import httpStatus from 'http-status';
+
+import { transactionService } from '../services';
 import ApiError from '../utils/ApiError';
 import catchAsync from '../utils/catchAsync';
-import { transactionService } from '../services';
 
 const getTransactionDetails = catchAsync(async (req, res) => {
   const transactionDetails = await transactionService.getTransactionDetails(

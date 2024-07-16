@@ -1,12 +1,13 @@
+import { TokenType, User } from '@prisma/client';
 import httpStatus from 'http-status';
+
+import prisma from '../client';
+import { AuthTokensResponse } from '../types/response';
+import ApiError from '../utils/ApiError';
+import { encryptPassword, isPasswordMatch } from '../utils/encryption';
+import exclude from '../utils/exclude';
 import tokenService from './token.service';
 import userService from './user.service';
-import ApiError from '../utils/ApiError';
-import { TokenType, User } from '@prisma/client';
-import prisma from '../client';
-import { encryptPassword, isPasswordMatch } from '../utils/encryption';
-import { AuthTokensResponse } from '../types/response';
-import exclude from '../utils/exclude';
 
 /**
  * Login with username and password

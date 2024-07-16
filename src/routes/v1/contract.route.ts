@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { contractController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { contractValidation } from '../../validations';
-import { contractController } from '../../controllers';
 
 const router = express.Router();
 

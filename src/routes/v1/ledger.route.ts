@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { ledgerController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { ledgerValidation } from '../../validations';
-import { ledgerController } from '../../controllers';
 
 const router = express.Router();
 

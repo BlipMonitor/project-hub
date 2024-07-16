@@ -1,8 +1,9 @@
 import express from 'express';
+
+import { messageQueueController } from '../../controllers';
 import auth from '../../middlewares/auth';
 import validate from '../../middlewares/validate';
 import { messageQueueValidation } from '../../validations';
-import { messageQueueController } from '../../controllers';
 
 const router = express.Router();
 

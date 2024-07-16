@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { NextFunction, Request, Response } from 'express-serve-static-core';
 
 export interface CustomParamsDictionary {
   [key: string]: any;

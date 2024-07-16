@@ -1,5 +1,6 @@
-import { server } from '../config/stellar';
 import * as StellarSdk from '@stellar/stellar-sdk';
+
+import { server } from '../config/stellar';
 
 /**
  * Get latest ledger
