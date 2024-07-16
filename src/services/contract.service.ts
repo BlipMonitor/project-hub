@@ -1,9 +1,11 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
 import { xdr } from '@stellar/stellar-sdk';
+// import prisma from '../client';
 import config from '../config/config';
 import {
   SorobanContractData,
   ContractState,
+  // ContractInteractionData,
   ContractInvocation,
   ContractEvent
 } from '../types/soroban';
@@ -47,6 +49,15 @@ const getContractData = async (contractId: string): Promise<SorobanContractData>
   }
 };
 
+// /**
+//  * Log contract interaction
+//  * @param {ContractInteractionData} data - The contract interaction data
+//  * @returns {Promise<void>}
+//  */
+// const logContractInteraction = async (data: ContractInteractionData): Promise<void> => {
+//   await prisma.contractInteraction.create({ data });
+// };
+
 /**
  * Handle contract invocation
  * @param {ContractInvocation} invocation - The contract invocation data
@@ -59,6 +70,19 @@ const handleContractInvocation = async (
     const parsedData: ContractInvocation = parseContractInvocation(invocation);
 
     await storeContractInvocation(parsedData);
+
+    // TODO: Log the contract interaction with dynamic data
+    // await logContractInteraction({
+    //   contractId: invocation.contractId,
+    //   operation: invocation.operation,
+    //   transactionHash: invocation.transactionHash,
+    //   ledgerSequence: invocation.ledgerSequence,
+    //   timestamp: new Date(),
+    //   parameters: invocation.args,
+    //   result: parsedData.result,
+    //   status: parsedData.status,
+    //   functionName: invocation.functionName
+    // });
 
     return parsedData;
   } catch (error) {

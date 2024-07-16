@@ -21,6 +21,18 @@ export interface ContractFunctionParameter {
   type: xdr.ScSpecTypeDef;
 }
 
+export interface ContractInteractionData {
+  contractId: string;
+  operation: string;
+  transactionHash: string;
+  ledgerSequence: number;
+  timestamp: Date;
+  parameters: any;
+  result: string;
+  status: string;
+  functionName: string;
+}
+
 export interface ContractInvocation {
   contractId: string;
   functionName: string;

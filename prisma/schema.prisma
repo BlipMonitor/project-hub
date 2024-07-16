@@ -147,6 +147,57 @@ model DailyResponseTime {
   date           DateTime @default(now())
 }
 
+model ContractInteraction {
+  id              Int      @id @default(autoincrement())
+  contractId      String
+  operation       String
+  transactionHash String
+  ledgerSequence  Int
+  timestamp       DateTime
+  parameters      Json?
+  result          Json?
+  status          String
+  functionName    String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Alert {
+  id              Int      @id @default(autoincrement())
+  contractAddress String
+  alertType       String
+  status          String
+  createdAt       DateTime @default(now())
+  resolvedAt      DateTime?
+  details         Json?
+  notifications   Notification[]
+
+  @@index([id])
+}
+
+model AlertConfiguration {
+  id              Int      @id @default(autoincrement())
+  contractAddress String
+  alertType       String
+  threshold       Float
+  timeWindow      Int
+  enabled         Boolean  @default(true)
+
+  @@unique([contractAddress, alertType])
+}
+
+model Notification {
+  id               Int      @id @default(autoincrement())
+  alertId          Int
+  notificationType String
+  recipient        String
+  sentAt           DateTime @default(now())
+  status           String
+  alert            Alert    @relation(fields: [alertId], references: [id])
+
+  @@index([alertId])
+}
+
 enum Role {
   USER
   ADMIN

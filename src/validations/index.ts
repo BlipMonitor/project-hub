@@ -6,3 +6,4 @@ export { default as ledgerValidation } from './ledger.validation';
 export { default as contractValidation } from './contract.validation';
 export { default as messageQueueValidation } from './messageQueue.validation';
 export { default as metricsValidation } from './metrics.validation';
+export { default as alertValidation } from './alert.validation';

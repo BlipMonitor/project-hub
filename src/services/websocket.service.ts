@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import http from 'http';
 import logger from '../config/logger';
-import { ledgerService } from '../services';
+import { ledgerService, alertService } from '../services';
 
 /**
  * Initialize WebSocket server
@@ -35,14 +35,18 @@ const handleConnection = (ws: WebSocket, clients: Set<WebSocket>): void => {
  * @param {WebSocket} ws - WebSocket connection
  * @param {string} message - Received message
  */
-const handleMessage = (ws: WebSocket, message: string): void => {
+const handleMessage = async (ws: WebSocket, message: string): Promise<void> => {
   try {
     const data = JSON.parse(message);
-    if (data.type === 'subscribe' && data.event === 'ledger') {
-      logger.info('Client subscribed to ledger updates');
+    if (data.type === 'processAlerts' && data.contractId) {
+      await alertService.processAlerts(data.contractId);
+      ws.send(JSON.stringify({ type: 'processAlerts', status: 'success' }));
+    } else {
+      ws.send(JSON.stringify({ type: 'error', message: 'Invalid message format' }));
     }
   } catch (error) {
-    logger.error('Error parsing WebSocket message:', error);
+    logger.error('Error processing WebSocket message:', error);
+    ws.send(JSON.stringify({ type: 'error', message: 'Internal server error' }));
   }
 };
 
