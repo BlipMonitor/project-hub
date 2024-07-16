@@ -26,6 +26,7 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    EXAMPLE_EMAIL: Joi.string().description('the email address to send notifications to'),
     STELLAR_NETWORK: Joi.string().required().valid('testnet', 'mainnet'),
     QUICKNODE_RPC_URL: Joi.string().required().uri()
   })
@@ -58,7 +59,8 @@ export default {
         pass: envVars.SMTP_PASSWORD
       }
     },
-    from: envVars.EMAIL_FROM
+    from: envVars.EMAIL_FROM,
+    exampleEmail: envVars.EXAMPLE_EMAIL
   },
   stellar: {
     network: envVars.STELLAR_NETWORK,
